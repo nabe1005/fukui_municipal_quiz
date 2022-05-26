@@ -31,9 +31,9 @@
             <div class="container">
               <p class="subtitle has-text-centered" id="correctCity">
             </div>
-
-            <button id="nextQuestion">次へ</button>
           </div>
+
+          <button id="nextQuestion" class="button is-large is-hidden">次へ</button>
 
         </div>
       </div>
@@ -89,16 +89,11 @@
       }
 
       const buttonNextQuestion = document.querySelector("#nextQuestion");
-      buttonNextQuestion.style.visibility = "visible";
+      buttonNextQuestion.classList.remove("is-hidden")
 
       if (questionIndex == amount - 1) {
         buttonNextQuestion.onclick = () => {
           resetView();
-          await fetch("/result", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ correctCount: correctCount })
-          });
         };
       } else {
         buttonNextQuestion.onclick = () => {
@@ -124,7 +119,7 @@
       correctCity.innerText = "";
 
       const buttonNextQuestion = document.querySelector("#nextQuestion");
-      buttonNextQuestion.style.visibility = "hidden";
+      buttonNextQuestion.classList.add("is-hidden")
     }
   </script>
 
