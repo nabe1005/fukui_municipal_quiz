@@ -1,6 +1,6 @@
-import { MunicipalQuestion, municipal_list } from "./municipal_question.ts";
+import { MunicipalQuestion, MunicipalQuestions, municipal_list } from "./municipal_question.ts";
 
-export function createQuestions(): MunicipalQuestion[] {
+export function createQuestions(): MunicipalQuestions {
     const questions: MunicipalQuestion[] = [];
 
     // 登録されてる市町村それぞれのクイズを作成する
@@ -9,7 +9,7 @@ export function createQuestions(): MunicipalQuestion[] {
         questions.push(question);
     });
 
-    return questions;
+    return { amount: questions.length, questions: questions };
 }
 
 function createQuestion(imgPath: string): MunicipalQuestion {

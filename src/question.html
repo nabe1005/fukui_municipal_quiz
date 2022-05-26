@@ -74,7 +74,7 @@
       const question = quizList[questionIndex];
 
       const imgCity = document.querySelector("#cityImage");
-      imgCity.setAttribute("src", question.img);
+      imgCity.setAttribute("src", question.imgPath);
 
       const divChoices = document.getElementById("choices");
       for (let i = 0; i < question.choices.length; i++) {
