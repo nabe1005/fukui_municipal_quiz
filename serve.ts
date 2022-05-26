@@ -6,6 +6,12 @@ serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
+  if (req.method === "GET" && pathname === "/api/mock") {
+    return new Response(await Deno.readTextFile("mock.json"), {
+      headers: { "Content-Type": "application/json; charset=utf-8" }
+    });
+  }
+
   if (pathname === "/") {
     return await serveFile(req, getFilePath("src/index.html"));
   }
