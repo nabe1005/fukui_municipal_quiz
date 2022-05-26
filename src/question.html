@@ -2,99 +2,99 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" />
-    <title>福井市町村クイズ</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" />
+  <title>福井市町村クイズ</title>
 </head>
 
 <body>
-    <section class="hero is-fullheight">
-        <div class="hero-body">
-            <div class="columns is-desktop">
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="columns is-desktop">
 
-                <div class="column">
-                    <img id="cityImage">
-                </div>
-
-                <div class="column">
-                    <p class="title has-text-centered">この市区町村はどれ？</p>
-
-                    <div id="choices"></div>
-
-                    <div class="result">
-                        <div class="container">
-                            <p class="title has-text-centered" id="correctStatus">
-                        </div>
-
-                        <div class="container">
-                            <p class="subtitle has-text-centered" id="correctCity">
-                        </div>
-
-                        <button id="nextQuestion">次へ</button>
-                    </div>
-
-                </div>
-            </div>
+        <div class="column">
+          <img id="cityImage">
         </div>
-    </section>
 
-    <script type="module">
-        let apiBody;
-        let currentQuizIndex;
-        let quizList;
-        let amount;
+        <div class="column">
+          <p class="title has-text-centered">この市区町村はどれ？</p>
 
-        window.onload = async (event) => {
-            const response = await fetch("/api/mock");
-            apiBody = JSON.parse(await response.text());
-            quizList = apiBody.questions;
-            amount = apiBody.quizAmount;
-            showQuestion(0);
-        };
+          <div id="choices"></div>
 
-        function showQuestion(questionIndex) {
-            const question = quizList[questionIndex];
+          <div class="result">
+            <div class="container">
+              <p class="title has-text-centered" id="correctStatus">
+            </div>
 
-            const imgCity = document.querySelector("#cityImage");
-            imgCity.setAttribute("src", question.img);
+            <div class="container">
+              <p class="subtitle has-text-centered" id="correctCity">
+            </div>
 
-            const divChoices = document.getElementById("choices");
-            for (let i = 0; i < question.choices.length; i++) {
-                const buttonChoice = document.createElement("button");
-                buttonChoice.innerHTML = question.choices[i];
-                buttonChoice.className = "button is-link is-large is-rounded is-fullwidth";
-                buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
-                divChoices.appendChild(buttonChoice);
-            }
+            <button id="nextQuestion">次へ</button>
+          </div>
 
-            const buttonNextQuestion = document.querySelector("#nextQuestion");
-            buttonNextQuestion.style.visibility = "hidden";
-        }
+        </div>
+      </div>
+    </div>
+  </section>
 
-        function checkAnswer(questionIndex, choiceIndex) {
-            const question = quizList[questionIndex];
-            const correctStatus = document.querySelector("#correctStatus");
-            console.log(correctStatus);
+  <script type="module">
+    let apiBody;
+    let currentQuizIndex;
+    let quizList;
+    let amount;
 
-            if (question.correctIndex == choiceIndex) {
-                correctStatus.innerText = "正解！";
-                correctStatus.classList.add("has-text-primary");
-                correctStatus.classList.remove("has-text-danger");
-            } else {
-                correctStatus.innerText = "不正解！";
-                correctStatus.classList.add("has-text-danger");
-                correctStatus.classList.remove("has-text-primary");
-                const correctCity = document.querySelector("#correctCity");
-                correctCity.innerText = `正解は ${question.choices[question.correctIndex]} だよ！`;
-            }
+    window.onload = async (event) => {
+      const response = await fetch("/api/mock");
+      apiBody = JSON.parse(await response.text());
+      quizList = apiBody.questions;
+      amount = apiBody.quizAmount;
+      showQuestion(0);
+    };
 
-            const buttonNextQuestion = document.querySelector("#nextQuestion");
-            buttonNextQuestion.style.visibility = "visibility";
-            buttonNextQuestion.onclick = () => { showQuestion(questionIndex + 1) };
-        }
-    </script>
+    function showQuestion(questionIndex) {
+      const question = quizList[questionIndex];
+
+      const imgCity = document.querySelector("#cityImage");
+      imgCity.setAttribute("src", question.img);
+
+      const divChoices = document.getElementById("choices");
+      for (let i = 0; i < question.choices.length; i++) {
+        const buttonChoice = document.createElement("button");
+        buttonChoice.innerHTML = question.choices[i];
+        buttonChoice.className = "button is-link is-large is-rounded is-fullwidth";
+        buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
+        divChoices.appendChild(buttonChoice);
+      }
+
+      const buttonNextQuestion = document.querySelector("#nextQuestion");
+      buttonNextQuestion.style.visibility = "hidden";
+    }
+
+    function checkAnswer(questionIndex, choiceIndex) {
+      const question = quizList[questionIndex];
+      const correctStatus = document.querySelector("#correctStatus");
+      console.log(correctStatus);
+
+      if (question.correctIndex == choiceIndex) {
+        correctStatus.innerText = "正解！";
+        correctStatus.classList.add("has-text-primary");
+        correctStatus.classList.remove("has-text-danger");
+      } else {
+        correctStatus.innerText = "不正解！";
+        correctStatus.classList.add("has-text-danger");
+        correctStatus.classList.remove("has-text-primary");
+        const correctCity = document.querySelector("#correctCity");
+        correctCity.innerText = `正解は ${question.choices[question.correctIndex]} だよ！`;
+      }
+
+      const buttonNextQuestion = document.querySelector("#nextQuestion");
+      buttonNextQuestion.style.visibility = "visibility";
+      buttonNextQuestion.onclick = () => { showQuestion(questionIndex + 1) };
+    }
+  </script>
 </body>
 
 </html>
