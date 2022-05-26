@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <section class="hero is-fullheight">
+  <section id="question" class="hero is-fullheight">
     <div class="hero-body">
       <div class="columns is-desktop">
 
@@ -40,6 +40,8 @@
     </div>
   </section>
 
+  <section id="result" class="is-hidden" />
+
   <script type="module">
     let apiBody;
     let currentQuizIndex;
@@ -51,11 +53,12 @@
       const response = await fetch("/api/mock");
       apiBody = JSON.parse(await response.text());
       quizList = apiBody.questions;
-      amount = apiBody.quizAmount;
+      amount = apiBody.amount;
       showQuestion(0);
     };
 
     function showQuestion(questionIndex) {
+      console.log("showQuestion");
       const question = quizList[questionIndex];
 
       const imgCity = document.querySelector("#cityImage");
@@ -93,17 +96,20 @@
 
       if (questionIndex == amount - 1) {
         buttonNextQuestion.onclick = () => {
-          resetView();
+          const questionArea = document.querySelector("#question");
+          questionArea.classList.add("is-hidden");
+          const resultArea = document.querySelector("#result");
+          resultArea.classList.remove("is-hidden");
         };
       } else {
         buttonNextQuestion.onclick = () => {
-          resetView();
+          resetQuestionView();
           showQuestion(questionIndex + 1);
         };
       }
     }
 
-    function resetView() {
+    function resetQuestionView() {
       const imgCity = document.querySelector("#cityImage");
       imgCity.setAttribute("src", "");
 
