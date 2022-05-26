@@ -11,6 +11,10 @@ serve(async (req) => {
     return await serveFile(req, getFilePath("src/index.html"));
   }
 
+  if (pathname === "/question") {
+    return await serveFile(req, getFilePath("src/question.html"));
+  }
+
   return await serveFile(req, getFilePath("src/not-found.html"));
 
 }, { port: 8000 });
