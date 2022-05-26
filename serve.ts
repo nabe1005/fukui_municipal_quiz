@@ -25,7 +25,7 @@ serve(async (req) => {
   }
 
 
-  if (pathname === "/question") {
+  if (pathname === "/questions") {
     return await serveFile(req, getFilePath("src/question.html"));
   }
 
