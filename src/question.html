@@ -26,13 +26,13 @@
                     <p id="correctCity">
                 </div>
                 <button id="nextQuestion">次へ</button>
+                <p id="result"></p>
             </div>
         </div>
     </div>
 
     <script type="module">
         let apiBody;
-        let currentQuizIndex;
         let quizList;
         let amount;
         let correctCount = 0;
@@ -41,7 +41,7 @@
             const response = await fetch("/api/mock");
             apiBody = JSON.parse(await response.text());
             quizList = apiBody.questions;
-            amount = apiBody.quizAmount;
+            amount = apiBody.amount;
             showQuestion(0);
         };
 
@@ -79,12 +79,9 @@
 
             if (questionIndex == amount - 1) {
                 buttonNextQuestion.onclick = () => {
-                    resetView();
-                    await fetch("/result", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ correctCount: correctCount })
-                    });
+                    const pResult = document.querySelector("#result");
+                    pResult.innerText = correctCount + "問正解！";
+                    buttonNextQuestion.style.visibility = "hidden";
                 };
             } else {
                 buttonNextQuestion.onclick = () => {
