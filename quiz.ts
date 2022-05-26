@@ -28,7 +28,7 @@ function createQuestion(imgPath: string): MunicipalQuestion {
         choices.push(incorrectMunicipalList[index]);
     }
 
-    // 選択肢をシャッフルする(Fisher-Fates shuffle)
+    // 選択肢をシャッフルする(Fisher-Yates shuffle)
     for (let i = choices.length - 1; i >= 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [choices[i], choices[j]] = [choices[j], choices[i]];
