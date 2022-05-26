@@ -10,26 +10,35 @@
 </head>
 
 <body>
-    <div>
-        <div class="columns is-desktop">
-            <div class="column">
-                <img id="cityImage">
-            </div>
-            <div class="column">
-                この市区町村はどれ？
-                <div id="choices"></div>
-                <p id="previousWord"></p>
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class="columns is-desktop">
 
-                <div class="">
-                    <p id="correctStatus">
+                <div class="column">
+                    <img id="cityImage">
                 </div>
-                <div class="tile">
-                    <p id="correctCity">
+
+                <div class="column">
+                    <p class="title has-text-centered">この市区町村はどれ？</p>
+
+                    <div id="choices"></div>
+
+                    <div class="result">
+                        <div class="container">
+                            <p class="title has-text-centered" id="correctStatus">
+                        </div>
+
+                        <div class="container">
+                            <p class="subtitle has-text-centered" id="correctCity">
+                        </div>
+
+                        <button id="nextQuestion">次へ</button>
+                    </div>
+
                 </div>
-                <button id="nextQuestion">次へ</button>
             </div>
         </div>
-    </div>
+    </section>
 
     <script type="module">
         let apiBody;
@@ -55,6 +64,7 @@
             for (let i = 0; i < question.choices.length; i++) {
                 const buttonChoice = document.createElement("button");
                 buttonChoice.innerHTML = question.choices[i];
+                buttonChoice.className = "button is-link is-large is-rounded is-fullwidth";
                 buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
                 divChoices.appendChild(buttonChoice);
             }
@@ -69,13 +79,16 @@
             console.log(correctStatus);
 
             if (question.correctIndex == choiceIndex) {
-                correctStatus.innerText = "正解！"
+                correctStatus.innerText = "正解！";
+                correctStatus.classList.add("has-text-primary");
+                correctStatus.classList.remove("has-text-danger");
             } else {
-                correctStatus.innerText = "不正解！"
+                correctStatus.innerText = "不正解！";
+                correctStatus.classList.add("has-text-danger");
+                correctStatus.classList.remove("has-text-primary");
+                const correctCity = document.querySelector("#correctCity");
+                correctCity.innerText = `正解は ${question.choices[question.correctIndex]} だよ！`;
             }
-
-            const correctCity = document.querySelector("#correctCity");
-            correctCity.innerText = question.choices[question.correctIndex];
 
             const buttonNextQuestion = document.querySelector("#nextQuestion");
             buttonNextQuestion.style.visibility = "visibility";
