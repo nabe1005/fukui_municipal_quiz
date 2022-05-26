@@ -10,37 +10,45 @@
 </head>
 
 <body>
-  <section id="question" class="hero is-fullheight">
-    <div class="hero-body">
-      <div class="columns is-desktop">
+  <section id="content" class="hero is-fullheight">
 
-        <div class="column">
-          <img id="cityImage">
-        </div>
+    <div id="result" class="hero-body is-hidden">
+      <div class="container is-centered is-vcentered">
+        <p id="correctCount" class="title has-text-centered is-size-1"></p>
+      </div>
+    </div>
 
-        <div class="column">
-          <p class="title has-text-centered">この市区町村はどれ？</p>
+    <div id="question" class="hero-body">
+      <div class="container is-centered is-vcentered">
+        <div class="columns is-desktop">
 
-          <div id="choices"></div>
-
-          <div class="result">
-            <div class="container">
-              <p class="title has-text-centered" id="correctStatus">
-            </div>
-
-            <div class="container">
-              <p class="subtitle has-text-centered" id="correctCity">
-            </div>
+          <div class="column is-6">
+            <img id="cityImage">
           </div>
 
-          <button id="nextQuestion" class="button is-large is-hidden">次へ</button>
+          <div class="column is-6">
+            <p class="title has-text-centered">この市区町村はどれ？</p>
 
+            <div id="choices"></div>
+
+            <div class="result">
+              <div class="container">
+                <p class="title has-text-centered" id="correctStatus">
+              </div>
+
+              <div class="container">
+                <p class="subtitle has-text-centered" id="correctCity">
+              </div>
+            </div>
+
+            <button id="nextQuestion" class="button is-large is-hidden">次へ</button>
+
+          </div>
         </div>
       </div>
     </div>
+    </div>
   </section>
-
-  <section id="result" class="is-hidden" />
 
   <script type="module">
     let apiBody;
@@ -95,18 +103,21 @@
       buttonNextQuestion.classList.remove("is-hidden")
 
       if (questionIndex == amount - 1) {
-        buttonNextQuestion.onclick = () => {
-          const questionArea = document.querySelector("#question");
-          questionArea.classList.add("is-hidden");
-          const resultArea = document.querySelector("#result");
-          resultArea.classList.remove("is-hidden");
-        };
+        buttonNextQuestion.onclick = () => showResultView();
       } else {
         buttonNextQuestion.onclick = () => {
           resetQuestionView();
           showQuestion(questionIndex + 1);
         };
       }
+    }
+
+    function showResultView() {
+      const questionArea = document.querySelector("#question").classList.add("is-hidden");
+      const resultArea = document.querySelector("#result").classList.remove("is-hidden");
+      document.querySelector("#content").classList.add("is-primary");
+      const correctCountArea = document.querySelector("#correctCount");
+      correctCountArea.innerText = `結果：${amount}問中、${correctCount}問正解！`;
     }
 
     function resetQuestionView() {
