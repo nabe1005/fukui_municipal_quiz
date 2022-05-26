@@ -1,17 +1,17 @@
-#!/usr/bin/env -S deno run --allow-net --watch
+#!/usr/bin/env -S deno run --allow-net --allow-read --watch
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
-import { serveDir } from "https://deno.land/std@0.140.0/http/file_server.ts";
+import { serveFile } from "https://deno.land/std@0.140.0/http/file_server.ts";
 
-serve((req) => {
+serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
-  return serveDir(req, {
-    fsRoot: "public",
-    urlRoot: "",
-    showDirListing: true,
-    enableCors: true,
-  });
+
+  if (pathname === "/") {
+    return await serveFile(req, `${Deno.cwd()}/src/index.html`);
+  }
+
+  return await serveFile(req, `${Deno.cwd()}/src/not-found.html`);
 
 }, { port: 8000 });
 
