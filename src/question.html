@@ -62,7 +62,7 @@
     let correctCount = 0;
 
     window.onload = async (event) => {
-      const response = await fetch("/api/mock");
+      const response = await fetch("/api/questions");
       apiBody = JSON.parse(await response.text());
       quizList = apiBody.questions;
       amount = apiBody.amount;
