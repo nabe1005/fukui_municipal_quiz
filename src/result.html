@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" />
+    <title>福井市町村クイズ</title>
+</head>
+
+<body>
+    <div>
+        <div class="columns is-desktop">
+            <div class="column">
+                <img id="cityImage">
+            </div>
+            <div class="column">
+                この市区町村はどれ？
+                <div id="choices"></div>
+
+                <div class="">
+                    <p id="correctStatus">
+                </div>
+                <div class="">
+                    <p id="correctCity">
+                </div>
+                <button id="nextQuestion">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        let apiBody;
+        let currentQuizIndex;
+        let quizList;
+        let amount;
+        let correctCount = 0;
+
+        window.onload = async (event) => {
+            const response = await fetch("/api/mock");
+            apiBody = JSON.parse(await response.text());
+            quizList = apiBody.questions;
+            amount = apiBody.quizAmount;
+            showQuestion(0);
+        };
+
+        function showQuestion(questionIndex) {
+            const question = quizList[questionIndex];
+
+            const imgCity = document.querySelector("#cityImage");
+            imgCity.setAttribute("src", question.img);
+
+            const divChoices = document.getElementById("choices");
+            for (let i = 0; i < question.choices.length; i++) {
+                const buttonChoice = document.createElement("button");
+                buttonChoice.innerHTML = question.choices[i];
+                buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
+                divChoices.appendChild(buttonChoice);
+            }
+        }
+
+        function checkAnswer(questionIndex, choiceIndex) {
+            const question = quizList[questionIndex];
+
+            const correctStatus = document.querySelector("#correctStatus");
+            if (question.correctIndex == choiceIndex) {
+                correctStatus.innerText = "正解！"
+                correctCount++;
+            } else {
+                correctStatus.innerText = "不正解！"
+            }
+
+            const correctCity = document.querySelector("#correctCity");
+            correctCity.innerText = question.choices[question.correctIndex];
+
+            const buttonNextQuestion = document.querySelector("#nextQuestion");
+            buttonNextQuestion.style.visibility = "visible";
+
+            if (questionIndex == amount - 1) {
+                buttonNextQuestion.onclick = () => {
+                    resetView();
+
+                };
+            } else {
+                buttonNextQuestion.onclick = () => {
+                    resetView();
+                    showQuestion(questionIndex + 1);
+                };
+            }
+        }
+
+        function resetView() {
+            const imgCity = document.querySelector("#cityImage");
+            imgCity.setAttribute("src", "");
+
+            const divChoices = document.getElementById("choices");
+            while (divChoices.firstChild) {
+                divChoices.removeChild(divChoices.firstChild);
+            }
+
+            const correctStatus = document.querySelector("#correctStatus");
+            correctStatus.innerText = "";
+
+            const correctCity = document.querySelector("#correctCity");
+            correctCity.innerText = "";
+
+            const buttonNextQuestion = document.querySelector("#nextQuestion");
+            buttonNextQuestion.style.visibility = "hidden";
+        }
+    </script>
+</body>
+
+</html>

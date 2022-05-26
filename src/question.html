@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css" />
+  <title>福井市町村クイズ</title>
+</head>
+
+<body>
+  <section id="content" class="hero is-fullheight is-link">
+
+    <div id="result" class="hero-body is-hidden">
+      <div class="container is-centered is-vcentered has-text-centered">
+        <p id="correctCount" class="title has-text-centered is-size-1"></p>
+        <button class="button is-large is-danger has-text-weight-bold" onclick="location.href='/questions'">
+          りべんじ！！
+        </button>
+        <button class="button is-large is-dark has-text-weight-bold" onclick="location.href='/'">トップに戻る</button>
+      </div>
+    </div>
+
+    <div id="question" class="hero-body">
+      <div class="container is-centered is-vcentered">
+        <div class="columns is-desktop">
+
+          <div class="column is-6">
+            <img id="cityImage">
+          </div>
+
+          <div class="column is-6">
+            <p class="title has-text-centered">この市区町村はどれ？</p>
+
+            <div id="choices"></div>
+
+            <div class="result">
+              <div class="container">
+                <p class="title has-text-centered" id="correctStatus">
+              </div>
+
+              <div class="container">
+                <p class="subtitle has-text-centered" id="correctCity">
+              </div>
+            </div>
+
+            <button id="nextQuestion" class="button is-large is-hidden">次へ</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <script type="module">
+    let apiBody;
+    let currentQuizIndex;
+    let quizList;
+    let amount;
+    let correctCount = 0;
+
+    window.onload = async (event) => {
+      const response = await fetch("/api/questions");
+      apiBody = JSON.parse(await response.text());
+      quizList = apiBody.questions;
+      amount = apiBody.amount;
+      showQuestion(0);
+    };
+
+    function showQuestion(questionIndex) {
+      console.log("showQuestion");
+      const question = quizList[questionIndex];
+
+      const imgCity = document.querySelector("#cityImage");
+      imgCity.setAttribute("src", question.imgPath);
+
+      const divChoices = document.getElementById("choices");
+      for (let i = 0; i < question.choices.length; i++) {
+        const buttonChoice = document.createElement("button");
+        buttonChoice.id = `button-${i}`;
+        buttonChoice.className = "button is-light is-success is-large is-rounded is-fullwidth has-text-weight-bold";
+        buttonChoice.innerHTML = question.choices[i];
+        buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
+        divChoices.appendChild(buttonChoice);
+      }
+    }
+
+    function checkAnswer(questionIndex, choiceIndex) {
+      const divChoices = document.querySelector("#choices");
+      const question = quizList[questionIndex];
+
+      const correctStatus = document.querySelector("#correctStatus");
+      if (question.correctIndex == choiceIndex) {
+        correctStatus.innerText = "正解！"
+        correctStatus.classList.add("has-text-primary");
+        correctStatus.classList.remove("has-text-danger");
+        correctCount++;
+      } else {
+        correctStatus.innerText = "不正解！"
+        correctStatus.classList.add("has-text-danger");
+        correctStatus.classList.remove("has-text-primary");
+        const correctCity = document.querySelector("#correctCity");
+        correctCity.innerText = `正解は ${question.choices[question.correctIndex]} だよ！`;
+      }
+
+      for (let i = 0; i < question.choices.length; i++) {
+        document.querySelector(`#button-${i}`).disabled = true;
+      }
+
+      const buttonNextQuestion = document.querySelector("#nextQuestion");
+      buttonNextQuestion.classList.remove("is-hidden")
+
+      if (questionIndex == amount - 1) {
+        buttonNextQuestion.onclick = () => showResultView();
+      } else {
+        buttonNextQuestion.onclick = () => {
+          resetQuestionView();
+          showQuestion(questionIndex + 1);
+        };
+      }
+    }
+
+    function showResultView() {
+      const questionArea = document.querySelector("#question").classList.add("is-hidden");
+      const resultArea = document.querySelector("#result").classList.remove("is-hidden");
+      document.querySelector("#content").classList.add("is-primary");
+      const correctCountArea = document.querySelector("#correctCount");
+      correctCountArea.innerText = `結果：${amount}問中、${correctCount}問正解！`;
+    }
+
+    function resetQuestionView() {
+      const imgCity = document.querySelector("#cityImage");
+      imgCity.setAttribute("src", "");
+
+      const divChoices = document.getElementById("choices");
+      while (divChoices.firstChild) {
+        divChoices.removeChild(divChoices.firstChild);
+      }
+
+      const correctStatus = document.querySelector("#correctStatus");
+      correctStatus.innerText = "";
+
+      const correctCity = document.querySelector("#correctCity");
+      correctCity.innerText = "";
+
+      const buttonNextQuestion = document.querySelector("#nextQuestion");
+      buttonNextQuestion.classList.add("is-hidden")
+    }
+  </script>
+
+</body>
+
+</html>

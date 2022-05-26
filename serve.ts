@@ -24,6 +24,11 @@ serve(async (req) => {
     return await serveFile(req, getFilePath("src/index.html"));
   }
 
+
+  if (pathname === "/questions") {
+    return await serveFile(req, getFilePath("src/question.html"));
+  }
+
   if (pathname === "/styles.css") {
     return new Response(await Deno.readTextFile("./src/css/styles.css"), { headers: { "Content-Type": "text/css" } });
   }

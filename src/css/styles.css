@@ -1,1 +1,15 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
+#choices .button {
+    margin-bottom: 16px;
+}
+
+.result {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+#nextQuestion {
+    display: block;
+    margin-left: auto;
+}

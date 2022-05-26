@@ -1,3 +1,8 @@
+export interface MunicipalQuestions {
+    amount: number
+    questions: MunicipalQuestion[]
+}
+
 export interface MunicipalQuestion {
     imgPath: string
     choices: string[]
