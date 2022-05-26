@@ -10,11 +10,15 @@
 </head>
 
 <body>
-  <section id="content" class="hero is-fullheight">
+  <section id="content" class="hero is-fullheight is-link">
 
     <div id="result" class="hero-body is-hidden">
-      <div class="container is-centered is-vcentered">
+      <div class="container is-centered is-vcentered has-text-centered">
         <p id="correctCount" class="title has-text-centered is-size-1"></p>
+        <button class="button is-large is-danger has-text-weight-bold" onclick="location.href='/questions'">
+          りべんじ！！
+        </button>
+        <button class="button is-large is-dark has-text-weight-bold" onclick="location.href='/'">トップに戻る</button>
       </div>
     </div>
 
@@ -75,7 +79,7 @@
       const divChoices = document.getElementById("choices");
       for (let i = 0; i < question.choices.length; i++) {
         const buttonChoice = document.createElement("button");
-        buttonChoice.className = "button is-link is-large is-rounded is-fullwidth";
+        buttonChoice.className = "button is-light is-success is-large is-rounded is-fullwidth has-text-weight-bold";
         buttonChoice.innerHTML = question.choices[i];
         buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
         divChoices.appendChild(buttonChoice);
