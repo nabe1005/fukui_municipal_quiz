@@ -79,6 +79,7 @@
       const divChoices = document.getElementById("choices");
       for (let i = 0; i < question.choices.length; i++) {
         const buttonChoice = document.createElement("button");
+        buttonChoice.id = `button-${i}`;
         buttonChoice.className = "button is-light is-success is-large is-rounded is-fullwidth has-text-weight-bold";
         buttonChoice.innerHTML = question.choices[i];
         buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
@@ -87,6 +88,7 @@
     }
 
     function checkAnswer(questionIndex, choiceIndex) {
+      const divChoices = document.querySelector("#choices");
       const question = quizList[questionIndex];
 
       const correctStatus = document.querySelector("#correctStatus");
@@ -101,6 +103,10 @@
         correctStatus.classList.remove("has-text-primary");
         const correctCity = document.querySelector("#correctCity");
         correctCity.innerText = `正解は ${question.choices[question.correctIndex]} だよ！`;
+      }
+
+      for (let i = 0; i < question.choices.length; i++) {
+        document.querySelector(`#button-${i}`).disabled = true;
       }
 
       const buttonNextQuestion = document.querySelector("#nextQuestion");
