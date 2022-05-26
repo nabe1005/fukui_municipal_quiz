@@ -1,0 +1,25 @@
+{
+  "amount": 2,
+  "questions": [
+    {
+      "img": "images/sabae.png",
+      "choices": [
+        "おおい町",
+        "鯖江市",
+        "福井市",
+        "美浜町"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "img": "images/fukui.png",
+      "choices": [
+        "おおい町",
+        "鯖江市",
+        "福井市",
+        "美浜町"
+      ],
+      "correctIndex": 3
+    }
+  ]
+}
