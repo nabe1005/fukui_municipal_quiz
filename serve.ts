@@ -8,10 +8,14 @@ serve(async (req) => {
 
 
   if (pathname === "/") {
-    return await serveFile(req, `${Deno.cwd()}/src/index.html`);
+    return await serveFile(req, getFilePath("src/index.html"));
   }
 
-  return await serveFile(req, `${Deno.cwd()}/src/not-found.html`);
+  return await serveFile(req, getFilePath("src/not-found.html"));
 
 }, { port: 8000 });
 
+
+function getFilePath(relativePath: string): string {
+  return `${Deno.cwd()}/${relativePath}`;
+}
