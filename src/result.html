@@ -80,11 +80,7 @@
             if (questionIndex == amount - 1) {
                 buttonNextQuestion.onclick = () => {
                     resetView();
-                    await fetch("/result", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ correctCount: correctCount })
-                    });
+
                 };
             } else {
                 buttonNextQuestion.onclick = () => {
