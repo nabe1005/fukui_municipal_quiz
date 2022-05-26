@@ -45,6 +45,7 @@
     let currentQuizIndex;
     let quizList;
     let amount;
+    let correctCount = 0;
 
     window.onload = async (event) => {
       const response = await fetch("/api/mock");
@@ -63,27 +64,24 @@
       const divChoices = document.getElementById("choices");
       for (let i = 0; i < question.choices.length; i++) {
         const buttonChoice = document.createElement("button");
-        buttonChoice.innerHTML = question.choices[i];
         buttonChoice.className = "button is-link is-large is-rounded is-fullwidth";
+        buttonChoice.innerHTML = question.choices[i];
         buttonChoice.onclick = () => { checkAnswer(questionIndex, i) };
         divChoices.appendChild(buttonChoice);
       }
-
-      const buttonNextQuestion = document.querySelector("#nextQuestion");
-      buttonNextQuestion.style.visibility = "hidden";
     }
 
     function checkAnswer(questionIndex, choiceIndex) {
       const question = quizList[questionIndex];
-      const correctStatus = document.querySelector("#correctStatus");
-      console.log(correctStatus);
 
+      const correctStatus = document.querySelector("#correctStatus");
       if (question.correctIndex == choiceIndex) {
-        correctStatus.innerText = "正解！";
+        correctStatus.innerText = "正解！"
         correctStatus.classList.add("has-text-primary");
         correctStatus.classList.remove("has-text-danger");
+        correctCount++;
       } else {
-        correctStatus.innerText = "不正解！";
+        correctStatus.innerText = "不正解！"
         correctStatus.classList.add("has-text-danger");
         correctStatus.classList.remove("has-text-primary");
         const correctCity = document.querySelector("#correctCity");
@@ -91,8 +89,42 @@
       }
 
       const buttonNextQuestion = document.querySelector("#nextQuestion");
-      buttonNextQuestion.style.visibility = "visibility";
-      buttonNextQuestion.onclick = () => { showQuestion(questionIndex + 1) };
+      buttonNextQuestion.style.visibility = "visible";
+
+      if (questionIndex == amount - 1) {
+        buttonNextQuestion.onclick = () => {
+          resetView();
+          await fetch("/result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correctCount: correctCount })
+          });
+        };
+      } else {
+        buttonNextQuestion.onclick = () => {
+          resetView();
+          showQuestion(questionIndex + 1);
+        };
+      }
+    }
+
+    function resetView() {
+      const imgCity = document.querySelector("#cityImage");
+      imgCity.setAttribute("src", "");
+
+      const divChoices = document.getElementById("choices");
+      while (divChoices.firstChild) {
+        divChoices.removeChild(divChoices.firstChild);
+      }
+
+      const correctStatus = document.querySelector("#correctStatus");
+      correctStatus.innerText = "";
+
+      const correctCity = document.querySelector("#correctCity");
+      correctCity.innerText = "";
+
+      const buttonNextQuestion = document.querySelector("#nextQuestion");
+      buttonNextQuestion.style.visibility = "hidden";
     }
   </script>
 </body>
