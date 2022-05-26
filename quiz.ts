@@ -22,11 +22,12 @@ function createQuestion(imgPath: string): MunicipalQuestion {
     delete municipalListCopy[imgPath];
     const incorrectMunicipalList = Object.values(municipalListCopy);
 
-    // 誤答を3つ追加する
-    for (let i = 0; i < 3; i++) {
-        const index = Math.floor(Math.random() * incorrectMunicipalList.length);
-        choices.push(incorrectMunicipalList[index]);
+    // 誤答リストをシャッフルして先頭の3つを選択肢に加える
+    for (let i = incorrectMunicipalList.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [incorrectMunicipalList[i], incorrectMunicipalList[j]] = [incorrectMunicipalList[j], incorrectMunicipalList[i]];
     }
+    choices.push(...incorrectMunicipalList.slice(0, 3));
 
     // 選択肢をシャッフルする(Fisher-Yates shuffle)
     for (let i = choices.length - 1; i >= 0; i--) {
