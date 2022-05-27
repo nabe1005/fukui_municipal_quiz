@@ -21,7 +21,7 @@ export const municipal_list: { [key: string]: string } = {
     "images/minamiechizen.png": "南越前町",
     "images/obama.png": "小浜市",
     "images/ooi.png": "おおい町",
-    "images/oono.png": "大野町",
+    "images/oono.png": "大野市",
     "images/sabae.png": "鯖江市",
     "images/sakai.png": "坂井市",
     "images/takahama.png": "高浜町",
